@@ -144,13 +144,9 @@ class RNSamsungHealth {
   {
       var results = [];
       for(var step of data) {
-          var date = step.start_time !== undefined ? new Date(step.start_time) : new Date(step.day_time);
+          var date = step.start_time !== undefined ? step.start_time : step.day_time;
 
-          var day = ("0" + date.getDate()).slice(-2);
-          var month = ("0" + (date.getMonth()+1)).slice(-2);
-          var year = date.getFullYear();
-          var dateFormatted = year + "-" + month + "-" + day;
-          results.push({steps:step.count, date:dateFormatted,  calorie:step.calorie, distance: step.distance})
+          results.push({steps:step.count, date:date,  calorie:step.calorie})
         
       }
       return results;
