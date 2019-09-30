@@ -35,6 +35,8 @@ import com.samsung.android.sdk.healthdata.HealthPermissionManager.PermissionResu
 import com.samsung.android.sdk.healthdata.HealthPermissionManager.PermissionType;
 import com.samsung.android.sdk.healthdata.HealthResultHolder;
 
+import com.samsung.android.sdk.healthdata.HealthUserProfile;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -298,6 +300,33 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         }
 }
 
+  @ReactMethod
+    public void readBodyFatPercentage(double startDate, double endDate, Callback error, Callback success) {
+        HealthDataResolver resolver = new HealthDataResolver(mStore, null);
+        Filter filter = Filter.and(
+            Filter.greaterThanEquals(HealthConstants.Weight.START_TIME, (long)startDate),
+            Filter.lessThanEquals(HealthConstants.Weight.START_TIME, (long)endDate)
+        );
+        HealthDataResolver.ReadRequest request = new ReadRequest.Builder()
+                .setDataType(HealthConstants.Weight.HEALTH_DATA_TYPE) 
+                .setProperties(new String[]{
+                        HealthConstants.Weight.START_TIME,
+                        HealthConstants.Weight.BODY_FAT,
+                        HealthConstants.Weight.TIME_OFFSET, 
+                        HealthConstants.Weight.DEVICE_UUID  
+                })
+                .setFilter(filter)
+                .build();
+
+        try {
+            resolver.read(request).setResultListener(new HealthDataResultListener(this, error, success));
+        } catch (Exception e) {
+            Log.e(REACT_MODULE, e.getClass().getName() + " - " + e.getMessage());
+            Log.e(REACT_MODULE, "Getting weight body fay fails.");
+            error.invoke("Getting weight body fat fails.");
+        }
+}
+
 
 
 
@@ -415,4 +444,41 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         }
     }
 
+    @ReactMethod
+    public void readDateOfBirth(Callback error, Callback success) {
+        try {
+            HealthUserProfile usrProfile = HealthUserProfile.getProfile(mStore);
+
+            // Date of birth - yyyymmdd
+            String birthDate = usrProfile.getBirthDate();
+            if (birthDate.isEmpty()) {
+                Log.d(REACT_MODULE, "Date of birth is not set by the user yet.");
+                error.invoke("Date of birth is not set by the user yet.");
+            } else {
+                Log.d(REACT_MODULE, "Date of Birth read.");
+                success.invoke(birthDate);
+            }
+        } catch (Exception e) {
+            Log.d(REACT_MODULE, "Do not have permission to get user profile");
+        }
+    }
+
+    @ReactMethod
+    public void readGender(Callback error, Callback success) {
+        try {
+            HealthUserProfile usrProfile = HealthUserProfile.getProfile(mStore);
+
+            // Gender
+            int gender = usrProfile.getGender();
+            if (gender == HealthUserProfile.GENDER_UNKNOWN) {
+                Log.d(REACT_MODULE, "Gender is not set by the user yet.");
+                error.invoke("Gender is not set by the user yet.");
+            } else {
+                Log.d(REACT_MODULE, "Gender read.");
+                success.invoke(gender);
+            }
+        } catch (Exception e) {
+            Log.d(REACT_MODULE, "Do not have permission to get user profile");
+        }
+    }
 }

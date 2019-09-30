@@ -134,6 +134,36 @@ class RNSamsungHealth {
     );
   }
 
+  getDateOfBirth(callback) {
+    samsungHealth.readDateOfBirth(
+      (msg) => { callback(msg, false); },
+      (res) => {
+        callback(false, res);
+      }
+    );
+  }
+
+  getGender(callback) {
+    samsungHealth.readGender(
+      (msg) => { callback(msg, false); },
+      (res) => {
+        callback(false, res);
+      }
+    );
+  }
+
+  getLatestBodyFatPercentage(options, callback) {
+    let startDate = options.startDate != undefined ? options.startDate : (new Date()).setHours(0,0,0,0);
+    let endDate = options.endDate != undefined ? options.endDate : (new Date()).valueOf();
+
+    samsungHealth.readBodyFatPercentage(startDate, endDate,
+      (msg) => { callback(msg, false); },
+      (res) => {
+        callback(false, res);
+      }
+    );
+  }
+
 
 
   usubscribeListeners() {
