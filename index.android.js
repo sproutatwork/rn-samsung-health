@@ -44,6 +44,32 @@ class RNSamsungHealth {
     );
   }
 
+  getWalkingRunningDistance(options, callback) {
+    let startDate = options.startDate != undefined ? options.startDate : (new Date()).setHours(0,0,0,0);
+    let endDate = options.endDate != undefined ? options.endDate : (new Date()).valueOf();
+
+
+    samsungHealth.readStepCount(startDate, endDate,
+      (msg) => { callback(msg, false); },
+      (res) => {
+          if (res.length>0) {
+              var resData = res.map(function(dev) {
+                  var obj = {};
+                  obj.source = dev.source.name;
+                  obj.data = this.buildDailyDistance(dev.data);
+                  obj.sourceDetail = dev.source;
+                  return obj;
+                }, this);
+
+
+              callback(false, resData);
+          } else {
+              callback("There is not any steps distance data for this period", false);
+          }
+      }
+    );
+  }
+
   getWeight(options, callback) {
     let startDate = options.startDate != undefined ? options.startDate : (new Date()).setHours(0,0,0,0);
     let endDate = options.endDate != undefined ? options.endDate : (new Date()).valueOf();
@@ -177,6 +203,18 @@ class RNSamsungHealth {
           var date = step.start_time !== undefined ? step.start_time : step.day_time;
 
           results.push({steps:step.count, date:date,  calorie:step.calorie})
+        
+      }
+      return results;
+  }
+
+  buildDailyDistance(data)
+  {
+      var results = [];
+      for(var step of data) {
+        var date = step.start_time !== undefined ? step.start_time : step.day_time;
+        
+        results.push({distance:step.distance, date:date, calorie:step.calorie})
         
       }
       return results;
