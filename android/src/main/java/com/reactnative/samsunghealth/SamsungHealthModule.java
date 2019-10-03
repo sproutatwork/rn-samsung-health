@@ -207,8 +207,6 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             Log.e(REACT_MODULE, "Getting step count fails.");
             error.invoke("Getting step count fails.");
         }
-
-
     }
 
 
@@ -237,7 +235,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             Log.e(REACT_MODULE, "Getting Height fails.");
             error.invoke("Getting Height fails.");
         }
-}
+    }
 
 
    @ReactMethod
@@ -268,7 +266,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             Log.e(REACT_MODULE, "Getting BloodPressure fails.");
             error.invoke("Getting BloodPressure fails.");
         }
-}
+    }
 
 
 
@@ -298,7 +296,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             Log.e(REACT_MODULE, "Getting BodyTemperature fails.");
             error.invoke("Getting BodyTemperature fails.");
         }
-}
+    }
 
   @ReactMethod
     public void readBodyFatPercentage(double startDate, double endDate, Callback error, Callback success) {
@@ -325,7 +323,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             Log.e(REACT_MODULE, "Getting weight body fay fails.");
             error.invoke("Getting weight body fat fails.");
         }
-}
+    }
 
 
 
@@ -357,7 +355,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             Log.e(REACT_MODULE, "Getting HeartRate fails.");
             error.invoke("Getting HeartRate fails.");
         }
-}
+    }
 
 
 @ReactMethod
@@ -385,7 +383,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             Log.e(REACT_MODULE, "Getting Sleep fails.");
             error.invoke("Getting Sleep fails.");
         }
-}
+    }
 
 
     @ReactMethod
@@ -479,6 +477,37 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             }
         } catch (Exception e) {
             Log.d(REACT_MODULE, "Do not have permission to get user profile");
+        }
+    }
+
+    @ReactMethod
+    public void readWorkoutSamples(double startDate, double endDate, Callback error, Callback success) {
+       HealthDataResolver resolver = new HealthDataResolver(mStore, null);
+        Filter filter = Filter.and(
+            Filter.greaterThanEquals(HealthConstants.Exercise.START_TIME, (long)startDate),
+            Filter.lessThanEquals(HealthConstants.Exercise.START_TIME, (long)endDate)
+        );
+        HealthDataResolver.ReadRequest request = new ReadRequest.Builder()
+                .setDataType(HealthConstants.Exercise.HEALTH_DATA_TYPE)
+                .setProperties(new String[]{
+                        HealthConstants.Exercise.START_TIME,
+                        HealthConstants.Exercise.END_TIME,
+                        HealthConstants.Exercise.TIME_OFFSET, 
+                        HealthConstants.Exercise.DEVICE_UUID,
+                        HealthConstants.Exercise.EXERCISE_TYPE,
+                        HealthConstants.Exercise.CALORIE,
+                        HealthConstants.Exercise.DURATION,
+                        HealthConstants.Exercise.DISTANCE
+                })
+                .setFilter(filter)
+                .build();
+
+        try {
+            resolver.read(request).setResultListener(new HealthDataResultListener(this, error, success));
+        } catch (Exception e) {
+            Log.e(REACT_MODULE, e.getClass().getName() + " - " + e.getMessage());
+            Log.e(REACT_MODULE, "Getting TotalCholesterol fails.");
+            error.invoke("Getting TotalCholesterol fails.");
         }
     }
 }
