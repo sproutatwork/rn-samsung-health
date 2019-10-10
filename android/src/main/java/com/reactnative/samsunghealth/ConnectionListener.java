@@ -155,8 +155,8 @@ public class ConnectionListener implements
             alert.setNegativeButton("Cancel", null);
         }
 
-        alert.show();
-        //mErrorCallback.invoke(message);
+        //alert.show();
+        mErrorCallback.invoke(message);
     }
 
     @Override
