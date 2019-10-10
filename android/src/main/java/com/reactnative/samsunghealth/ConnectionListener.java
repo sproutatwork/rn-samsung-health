@@ -78,7 +78,9 @@ public class ConnectionListener implements
         mKeySet.add(new PermissionKey("com.samsung.health.blood_pressure", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.sleep", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.body_temperature", PermissionType.READ));
-
+        mKeySet.add(new PermissionKey("com.samsung.health.body_fat", PermissionType.READ));
+        mKeySet.add(new PermissionKey("com.samsung.health.user_profile", PermissionType.READ));
+        mKeySet.add(new PermissionKey("com.samsung.health.exercise", PermissionType.READ));
     }
 
     @Override
@@ -153,8 +155,8 @@ public class ConnectionListener implements
             alert.setNegativeButton("Cancel", null);
         }
 
-        alert.show();
-        //mErrorCallback.invoke(message);
+        //alert.show();
+        mErrorCallback.invoke(message);
     }
 
     @Override
