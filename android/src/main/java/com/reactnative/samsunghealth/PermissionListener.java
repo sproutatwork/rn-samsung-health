@@ -69,7 +69,7 @@ public class PermissionListener implements
             Log.e(REACT_MODULE, "NOT CONNECTED YET");
             mErrorCallback.invoke("Permisson canceled");
         } else {
-            Log.d(REACT_MODULE, "COUNT THE STEPS!");
+            Log.d(REACT_MODULE, "Permission Granted");
             mSuccessCallback.invoke(true);
         }
     }

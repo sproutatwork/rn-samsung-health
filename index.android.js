@@ -6,7 +6,7 @@ import {
 const samsungHealth = NativeModules.RNSamsungHealth;
 
 class RNSamsungHealth {
-  authorize( callback) {
+  authorize(callback) {
     samsungHealth.connect(
       [samsungHealth.STEP_COUNT],
       (msg) => { callback(msg, false); },
@@ -223,7 +223,12 @@ class RNSamsungHealth {
     );
   }
 
-
+  initStepCountObserver(callback) {
+    samsungHealth.startStepCountObserver(
+      (msg) => { callback(msg, false); },
+      (res) => { callback(false, true); }
+    );
+  }
 
   usubscribeListeners() {
     DeviceEventEmitter.removeAllListeners();

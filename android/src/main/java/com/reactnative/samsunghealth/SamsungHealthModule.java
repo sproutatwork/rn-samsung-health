@@ -75,6 +75,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         super.initialize();
 
         getReactApplicationContext().addLifecycleEventListener(this);
+        
         initSamsungHealth();
     }
 
@@ -151,22 +152,6 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             mStore = null;
         }
     }
-
-    /*
-    private final HealthDataObserver mObserver = new HealthDataObserver(null) {
-        // Update the step count when a change event is received
-        @Override
-        public void onChange(String dataTypeName) {
-            Log.d(REACT_MODULE, "Observer receives a data changed event");
-            readStepCount();
-        }
-    };
-    private void start() {
-        // Register an observer to listen changes of step count and get today step count
-        // HealthDataObserver.addObserver(mStore, HealthConstants.StepCount.HEALTH_DATA_TYPE, mObserver);
-        readStepCount();
-    }
-     */
 
     private long getStartTimeOfToday() {
         Calendar today = Calendar.getInstance();
@@ -510,4 +495,33 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             error.invoke("Getting TotalCholesterol fails.");
         }
     }
+
+    // Step Count Observer
+    private StepCountReporter mStepReporter;
+    private long mCurrentStartTime;
+    private Callback stepErrorCallback;
+    private Callback stepSuccessCallback;
+
+
+    @ReactMethod
+    public void startStepCountObserver(Callback error, Callback success) {
+        Log.d(REACT_MODULE, "startStepCountObserver");
+
+        stepErrorCallback = error;
+        stepSuccessCallback = success;
+
+        mStepReporter = new StepCountReporter(mStore);
+        mStepReporter.start(mStepCountObserver);
+    }
+
+    private final StepCountReporter.StepCountObserver mStepCountObserver = new StepCountReporter.StepCountObserver() {
+        @Override
+        public void onChanged(int count) {
+            if (count > 0) {
+                Log.d(REACT_MODULE, "StepCountObserver onChanged");
+                stepSuccessCallback.invoke("steps changed");
+            }
+            stepErrorCallback.invoke("getting step change failed");
+        }
+    };
 }

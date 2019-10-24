@@ -72,6 +72,7 @@ public class ConnectionListener implements
         // mKeySet.add(new PermissionKey(SamsungHealthModule.STEP_DAILY_TREND_TYPE, PermissionType.READ));
 
         mKeySet.add(new PermissionKey("com.samsung.shealth.step_daily_trend", PermissionType.READ));
+        mKeySet.add(new PermissionKey("com.samsung.health.step_count", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.weight", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.height", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.heart_rate", PermissionType.READ));
@@ -105,7 +106,7 @@ public class ConnectionListener implements
                 );
             } else {
                 // Get the current step count and display it
-                Log.d(REACT_MODULE, "COUNT THE STEPS!");
+                Log.d(REACT_MODULE, "Samsung Health Connected");
                 mSuccessCallback.invoke(true);
             }
         } catch (Exception e) {
