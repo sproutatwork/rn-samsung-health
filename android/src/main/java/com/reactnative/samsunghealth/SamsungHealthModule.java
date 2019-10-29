@@ -20,6 +20,7 @@ import com.facebook.react.bridge.LifecycleEventListener;
 
 import com.samsung.android.sdk.healthdata.HealthConnectionErrorResult;
 import com.samsung.android.sdk.healthdata.HealthConstants;
+import com.samsung.android.sdk.healthdata.HealthData;
 import com.samsung.android.sdk.healthdata.HealthDataObserver;
 import com.samsung.android.sdk.healthdata.HealthDataResolver;
 import com.samsung.android.sdk.healthdata.HealthDataResolver.Filter;
@@ -153,32 +154,21 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         }
     }
 
-    private long getStartTimeOfToday() {
-        Calendar today = Calendar.getInstance();
-
-        today.set(Calendar.HOUR_OF_DAY, 0);
-        today.set(Calendar.MINUTE, 0);
-        today.set(Calendar.SECOND, 0);
-        today.set(Calendar.MILLISECOND, 0);
-
-        return today.getTimeInMillis();
-    }
-
     // Read the today's step count on demand
     @ReactMethod
     public void readStepCount(double startDate, double endDate, Callback error, Callback success) {
         HealthDataResolver resolver = new HealthDataResolver(mStore, null);
 
         Filter filter = Filter.and(
-            Filter.greaterThanEquals(SamsungHealthModule.DAY_TIME, (long)startDate),
-            Filter.lessThanEquals(SamsungHealthModule.DAY_TIME, (long)endDate)
+            Filter.greaterThanEquals(HealthConstants.StepCount.START_TIME, (long)startDate),
+            Filter.lessThanEquals(HealthConstants.StepCount.END_TIME, (long)endDate)
         );
         HealthDataResolver.ReadRequest request = new ReadRequest.Builder()
-                .setDataType(SamsungHealthModule.STEP_DAILY_TREND_TYPE)
+                .setDataType(HealthConstants.StepCount.HEALTH_DATA_TYPE)
                 .setProperties(new String[]{
                         HealthConstants.StepCount.COUNT,
                         HealthConstants.StepCount.DISTANCE,
-                        SamsungHealthModule.DAY_TIME,
+                        HealthConstants.StepCount.START_TIME, 
                         HealthConstants.StepCount.CALORIE,
                         HealthConstants.StepCount.DEVICE_UUID 
                 })
@@ -266,7 +256,6 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
                 .setDataType(HealthConstants.BodyTemperature.HEALTH_DATA_TYPE) 
                 .setProperties(new String[]{
                         HealthConstants.BodyTemperature.START_TIME,
-                        // HealthConstants.BodyTemperature.END_TIME,
                         HealthConstants.BodyTemperature.TEMPERATURE,
                         HealthConstants.BodyTemperature.TIME_OFFSET,
                         HealthConstants.BodyTemperature.DEVICE_UUID 
@@ -310,11 +299,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         }
     }
 
-
-
-
-
-@ReactMethod
+    @ReactMethod
     public void readHeartRate(double startDate, double endDate, Callback error, Callback success) {
     HealthDataResolver resolver = new HealthDataResolver(mStore, null);
         Filter filter = Filter.and(
@@ -343,7 +328,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
     }
 
 
-@ReactMethod
+    @ReactMethod
     public void readSleep(double startDate, double endDate, Callback error, Callback success) {
     HealthDataResolver resolver = new HealthDataResolver(mStore, null);
         Filter filter = Filter.and(
@@ -524,4 +509,13 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             stepErrorCallback.invoke("getting step change failed");
         }
     };
+
+    // Background Sync
+    // private SamsungHealthBackgroundSync mBackgroundSync;
+
+    // @ReactMethod
+    // public void initBackgroundSync() {
+    //     mBackgroundSync = new SamsungHealthBackgroundSync();
+    //     mBackgroundSync.createBackgroundJob();
+    // }
 }
