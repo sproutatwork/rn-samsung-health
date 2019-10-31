@@ -170,7 +170,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
                         HealthConstants.StepCount.DISTANCE,
                         HealthConstants.StepCount.START_TIME, 
                         HealthConstants.StepCount.CALORIE,
-                        HealthConstants.StepCount.DEVICE_UUID 
+                        HealthConstants.StepCount.DEVICE_UUID,
                 })
                 .setFilter(filter)
                 .build();
@@ -509,13 +509,4 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             stepErrorCallback.invoke("getting step change failed");
         }
     };
-
-    // Background Sync
-    // private SamsungHealthBackgroundSync mBackgroundSync;
-
-    // @ReactMethod
-    // public void initBackgroundSync() {
-    //     mBackgroundSync = new SamsungHealthBackgroundSync();
-    //     mBackgroundSync.createBackgroundJob();
-    // }
 }
