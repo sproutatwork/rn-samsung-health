@@ -492,11 +492,14 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
     public void startStepCountObserver(Callback error, Callback success) {
         Log.d(REACT_MODULE, "startStepCountObserver");
 
-        stepErrorCallback = error;
-        stepSuccessCallback = success;
+        if (mStepReporter == null) {
+            Log.d(REACT_MODULE, "create new stepReporter");
+            stepErrorCallback = error;
+            stepSuccessCallback = success;
 
-        mStepReporter = new StepCountReporter(mStore);
-        mStepReporter.start(mStepCountObserver);
+            mStepReporter = new StepCountReporter(mStore);
+            mStepReporter.start(mStepCountObserver);
+        }
     }
 
     private final StepCountReporter.StepCountObserver mStepCountObserver = new StepCountReporter.StepCountObserver() {
