@@ -230,6 +230,10 @@ class RNSamsungHealth {
     );
   }
 
+  stopStepCountObserver() {
+    samsungHealth.cancelStepCountObserver();
+  }
+
   usubscribeListeners() {
     DeviceEventEmitter.removeAllListeners();
   }

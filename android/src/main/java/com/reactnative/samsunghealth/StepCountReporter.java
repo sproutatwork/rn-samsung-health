@@ -32,6 +32,10 @@ public class StepCountReporter {
         readTodayStepCount();
     }
 
+    public void cancel(StepCountObserver listener) {
+        HealthDataObserver.removeObserver(mStore, mObserver);
+    }
+
     // Read the today's step count on demand
     private void readTodayStepCount() {
         HealthDataResolver resolver = new HealthDataResolver(mStore, null);

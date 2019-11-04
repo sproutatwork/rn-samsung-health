@@ -160,15 +160,15 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         HealthDataResolver resolver = new HealthDataResolver(mStore, null);
 
         Filter filter = Filter.and(
-            Filter.greaterThanEquals(HealthConstants.StepCount.START_TIME, (long)startDate),
-            Filter.lessThanEquals(HealthConstants.StepCount.END_TIME, (long)endDate)
+            Filter.greaterThanEquals(SamsungHealthModule.DAY_TIME, (long)startDate),
+            Filter.lessThanEquals(SamsungHealthModule.DAY_TIME, (long)endDate)
         );
         HealthDataResolver.ReadRequest request = new ReadRequest.Builder()
-                .setDataType(HealthConstants.StepCount.HEALTH_DATA_TYPE)
+                .setDataType(SamsungHealthModule.STEP_DAILY_TREND_TYPE)
                 .setProperties(new String[]{
                         HealthConstants.StepCount.COUNT,
                         HealthConstants.StepCount.DISTANCE,
-                        HealthConstants.StepCount.START_TIME, 
+                        SamsungHealthModule.DAY_TIME, 
                         HealthConstants.StepCount.CALORIE,
                         HealthConstants.StepCount.DEVICE_UUID,
                 })
@@ -499,6 +499,15 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
 
             mStepReporter = new StepCountReporter(mStore);
             mStepReporter.start(mStepCountObserver);
+        }
+    }
+
+    @ReactMethod
+    public void cancelStepCountObserver() {
+        Log.d(REACT_MODULE, "cancelStepCountObserver");
+
+        if (mStepReporter == null) {
+            mStepReporter.cancel(mStepCountObserver);
         }
     }
 
