@@ -210,7 +210,7 @@ class RNSamsungHealth {
               workout.duration = sample.duration;
               workout.timeOffset = sample.timeOffset;
               workout.exercise_type = this.convertActivityIDtoSlug(sample);
-              return sample;
+              return workout;
             }, this);
             obj.sourceDetail = dev.source;
             return obj;
