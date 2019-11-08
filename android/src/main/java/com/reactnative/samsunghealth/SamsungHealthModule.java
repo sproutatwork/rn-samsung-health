@@ -505,8 +505,8 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
     @ReactMethod
     public void cancelStepCountObserver() {
         Log.d(REACT_MODULE, "cancelStepCountObserver");
-
-        if (mStepReporter == null) {
+        
+        if (mStepReporter != null) {
             mStepReporter.cancel(mStepCountObserver);
         }
     }
