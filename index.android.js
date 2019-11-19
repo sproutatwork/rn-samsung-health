@@ -6,7 +6,7 @@ import {
 const samsungHealth = NativeModules.RNSamsungHealth;
 
 class RNSamsungHealth {
-  authorize( callback) {
+  authorize(callback) {
     samsungHealth.connect(
       [samsungHealth.STEP_COUNT],
       (msg) => { callback(msg, false); },
@@ -210,7 +210,7 @@ class RNSamsungHealth {
               workout.duration = sample.duration;
               workout.timeOffset = sample.timeOffset;
               workout.exercise_type = this.convertActivityIDtoSlug(sample);
-              return sample;
+              return workout;
             }, this);
             obj.sourceDetail = dev.source;
             return obj;
@@ -223,7 +223,16 @@ class RNSamsungHealth {
     );
   }
 
+  initStepCountObserver(callback) {
+    samsungHealth.startStepCountObserver(
+      (msg) => { callback(msg, false); },
+      (res) => { callback(false, true); }
+    );
+  }
 
+  stopStepCountObserver() {
+    samsungHealth.cancelStepCountObserver();
+  }
 
   usubscribeListeners() {
     DeviceEventEmitter.removeAllListeners();

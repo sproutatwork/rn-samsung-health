@@ -20,6 +20,7 @@ import com.facebook.react.bridge.LifecycleEventListener;
 
 import com.samsung.android.sdk.healthdata.HealthConnectionErrorResult;
 import com.samsung.android.sdk.healthdata.HealthConstants;
+import com.samsung.android.sdk.healthdata.HealthData;
 import com.samsung.android.sdk.healthdata.HealthDataObserver;
 import com.samsung.android.sdk.healthdata.HealthDataResolver;
 import com.samsung.android.sdk.healthdata.HealthDataResolver.Filter;
@@ -75,6 +76,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         super.initialize();
 
         getReactApplicationContext().addLifecycleEventListener(this);
+        
         initSamsungHealth();
     }
 
@@ -152,33 +154,6 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         }
     }
 
-    /*
-    private final HealthDataObserver mObserver = new HealthDataObserver(null) {
-        // Update the step count when a change event is received
-        @Override
-        public void onChange(String dataTypeName) {
-            Log.d(REACT_MODULE, "Observer receives a data changed event");
-            readStepCount();
-        }
-    };
-    private void start() {
-        // Register an observer to listen changes of step count and get today step count
-        // HealthDataObserver.addObserver(mStore, HealthConstants.StepCount.HEALTH_DATA_TYPE, mObserver);
-        readStepCount();
-    }
-     */
-
-    private long getStartTimeOfToday() {
-        Calendar today = Calendar.getInstance();
-
-        today.set(Calendar.HOUR_OF_DAY, 0);
-        today.set(Calendar.MINUTE, 0);
-        today.set(Calendar.SECOND, 0);
-        today.set(Calendar.MILLISECOND, 0);
-
-        return today.getTimeInMillis();
-    }
-
     // Read the today's step count on demand
     @ReactMethod
     public void readStepCount(double startDate, double endDate, Callback error, Callback success) {
@@ -193,9 +168,9 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
                 .setProperties(new String[]{
                         HealthConstants.StepCount.COUNT,
                         HealthConstants.StepCount.DISTANCE,
-                        SamsungHealthModule.DAY_TIME,
+                        SamsungHealthModule.DAY_TIME, 
                         HealthConstants.StepCount.CALORIE,
-                        HealthConstants.StepCount.DEVICE_UUID 
+                        HealthConstants.StepCount.DEVICE_UUID,
                 })
                 .setFilter(filter)
                 .build();
@@ -281,7 +256,6 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
                 .setDataType(HealthConstants.BodyTemperature.HEALTH_DATA_TYPE) 
                 .setProperties(new String[]{
                         HealthConstants.BodyTemperature.START_TIME,
-                        // HealthConstants.BodyTemperature.END_TIME,
                         HealthConstants.BodyTemperature.TEMPERATURE,
                         HealthConstants.BodyTemperature.TIME_OFFSET,
                         HealthConstants.BodyTemperature.DEVICE_UUID 
@@ -325,11 +299,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         }
     }
 
-
-
-
-
-@ReactMethod
+    @ReactMethod
     public void readHeartRate(double startDate, double endDate, Callback error, Callback success) {
     HealthDataResolver resolver = new HealthDataResolver(mStore, null);
         Filter filter = Filter.and(
@@ -358,7 +328,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
     }
 
 
-@ReactMethod
+    @ReactMethod
     public void readSleep(double startDate, double endDate, Callback error, Callback success) {
     HealthDataResolver resolver = new HealthDataResolver(mStore, null);
         Filter filter = Filter.and(
@@ -510,4 +480,45 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             error.invoke("Getting TotalCholesterol fails.");
         }
     }
+
+    // Step Count Observer
+    private StepCountReporter mStepReporter;
+    private long mCurrentStartTime;
+    private Callback stepErrorCallback;
+    private Callback stepSuccessCallback;
+
+
+    @ReactMethod
+    public void startStepCountObserver(Callback error, Callback success) {
+        Log.d(REACT_MODULE, "startStepCountObserver");
+
+        if (mStepReporter == null) {
+            Log.d(REACT_MODULE, "create new stepReporter");
+            stepErrorCallback = error;
+            stepSuccessCallback = success;
+
+            mStepReporter = new StepCountReporter(mStore);
+            mStepReporter.start(mStepCountObserver);
+        }
+    }
+
+    @ReactMethod
+    public void cancelStepCountObserver() {
+        Log.d(REACT_MODULE, "cancelStepCountObserver");
+        
+        if (mStepReporter != null) {
+            mStepReporter.cancel(mStepCountObserver);
+        }
+    }
+
+    private final StepCountReporter.StepCountObserver mStepCountObserver = new StepCountReporter.StepCountObserver() {
+        @Override
+        public void onChanged(int count) {
+            if (count > 0) {
+                Log.d(REACT_MODULE, "StepCountObserver onChanged");
+                stepSuccessCallback.invoke("steps changed");
+            }
+            stepErrorCallback.invoke("getting step change failed");
+        }
+    };
 }
