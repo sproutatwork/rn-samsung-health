@@ -65,12 +65,12 @@ public class PermissionListener implements
         Log.d(REACT_MODULE, "Permission callback is received.");
         Map<PermissionKey, Boolean> resultMap = result.getResultMap();
 
-        if (resultMap.containsValue(Boolean.FALSE)) {
-            Log.e(REACT_MODULE, "NOT CONNECTED YET");
-            mErrorCallback.invoke("Permisson canceled");
-        } else {
+        if (resultMap.containsValue(Boolean.TRUE)) {
             Log.d(REACT_MODULE, "Permission Granted");
             mSuccessCallback.invoke(true);
+        } else {
+            Log.e(REACT_MODULE, "NOT CONNECTED YET");
+            mErrorCallback.invoke("Permisson canceled");
         }
     }
 };
