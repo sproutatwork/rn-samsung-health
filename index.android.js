@@ -38,7 +38,7 @@ class RNSamsungHealth {
 
               callback(false, resData);
           } else {
-              callback("There is no any steps data for this period", false);
+              callback("Samsung Health: There is no any steps data for this period", false);
           }
       }
     );
@@ -64,7 +64,7 @@ class RNSamsungHealth {
 
               callback(false, resData);
           } else {
-              callback("There is not any steps distance data for this period", false);
+              callback("Samsung Health: There is not any steps distance data for this period", false);
           }
       }
     );
@@ -217,7 +217,7 @@ class RNSamsungHealth {
           }, this);
           callback(false, resData);
         } else {
-          callback("There is no workout data for this period", false);
+          callback("Samsung Health: There is no workout data for this period", false);
         }
       }
     );
