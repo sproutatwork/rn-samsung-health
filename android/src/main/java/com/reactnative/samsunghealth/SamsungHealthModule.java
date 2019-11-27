@@ -133,9 +133,9 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
     }
 
     @ReactMethod
-    public void connect(ReadableArray permissions, Callback error, Callback success)
+    public void connect(Boolean requestPermission, ReadableArray permissions, Callback error, Callback success)
     {
-        ConnectionListener listener = new ConnectionListener(this, error, success);
+        ConnectionListener listener = new ConnectionListener(this, error, success, requestPermission);
         for (int i = 0; i < permissions.size(); i++) {
             listener.addReadPermission(permissions.getString(i));
         }
@@ -180,7 +180,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         } catch (Exception e) {
             Log.e(REACT_MODULE, e.getClass().getName() + " - " + e.getMessage());
             Log.e(REACT_MODULE, "Getting step count fails.");
-            error.invoke("Getting step count fails.");
+            error.invoke("Samsung Health: Getting step count failed.");
         }
     }
 
@@ -208,7 +208,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         } catch (Exception e) {
             Log.e(REACT_MODULE, e.getClass().getName() + " - " + e.getMessage());
             Log.e(REACT_MODULE, "Getting Height fails.");
-            error.invoke("Getting Height fails.");
+            error.invoke("Samsung Health: Getting Height failed.");
         }
     }
 
@@ -239,7 +239,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         } catch (Exception e) {
             Log.e(REACT_MODULE, e.getClass().getName() + " - " + e.getMessage());
             Log.e(REACT_MODULE, "Getting BloodPressure fails.");
-            error.invoke("Getting BloodPressure fails.");
+            error.invoke("Samsung Health: Getting BloodPressure failed.");
         }
     }
 
@@ -268,7 +268,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         } catch (Exception e) {
             Log.e(REACT_MODULE, e.getClass().getName() + " - " + e.getMessage());
             Log.e(REACT_MODULE, "Getting BodyTemperature fails.");
-            error.invoke("Getting BodyTemperature fails.");
+            error.invoke("Samsung Health: Getting BodyTemperature failed.");
         }
     }
 
@@ -294,8 +294,8 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             resolver.read(request).setResultListener(new HealthDataResultListener(this, error, success));
         } catch (Exception e) {
             Log.e(REACT_MODULE, e.getClass().getName() + " - " + e.getMessage());
-            Log.e(REACT_MODULE, "Getting weight body fay fails.");
-            error.invoke("Getting weight body fat fails.");
+            Log.e(REACT_MODULE, "Getting weight body fat fails.");
+            error.invoke("Samsung Health: Getting weight body fat failed.");
         }
     }
 
@@ -323,7 +323,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         } catch (Exception e) {
             Log.e(REACT_MODULE, e.getClass().getName() + " - " + e.getMessage());
             Log.e(REACT_MODULE, "Getting HeartRate fails.");
-            error.invoke("Getting HeartRate fails.");
+            error.invoke("Samsung Health: Getting HeartRate failed.");
         }
     }
 
@@ -351,7 +351,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         } catch (Exception e) {
             Log.e(REACT_MODULE, e.getClass().getName() + " - " + e.getMessage());
             Log.e(REACT_MODULE, "Getting Sleep fails.");
-            error.invoke("Getting Sleep fails.");
+            error.invoke("Samsung Health: Getting Sleep failed.");
         }
     }
 
@@ -380,7 +380,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         } catch (Exception e) {
             Log.e(REACT_MODULE, e.getClass().getName() + " - " + e.getMessage());
             Log.e(REACT_MODULE, "Getting weight fails.");
-            error.invoke("Getting weight fails.");
+            error.invoke("Samsung Health: Getting weight failed.");
         }
     }
 
@@ -408,7 +408,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         } catch (Exception e) {
             Log.e(REACT_MODULE, e.getClass().getName() + " - " + e.getMessage());
             Log.e(REACT_MODULE, "Getting TotalCholesterol fails.");
-            error.invoke("Getting TotalCholesterol fails.");
+            error.invoke("Samsung Health: Getting TotalCholesterol failed");
         }
     }
 
@@ -428,6 +428,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             }
         } catch (Exception e) {
             Log.d(REACT_MODULE, "Do not have permission to get user profile");
+            error.invoke("Samsung Health: Getting data of birth failed");
         }
     }
 
@@ -447,6 +448,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             }
         } catch (Exception e) {
             Log.d(REACT_MODULE, "Do not have permission to get user profile");
+            error.invoke("Samsung Health: Getting gender failed");
         }
     }
 
@@ -476,8 +478,8 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             resolver.read(request).setResultListener(new HealthDataResultListener(this, error, success));
         } catch (Exception e) {
             Log.e(REACT_MODULE, e.getClass().getName() + " - " + e.getMessage());
-            Log.e(REACT_MODULE, "Getting TotalCholesterol fails.");
-            error.invoke("Getting TotalCholesterol fails.");
+            Log.e(REACT_MODULE, "Getting workout fails.");
+            error.invoke("Samsung Health: Getting workouts failed");
         }
     }
 
@@ -518,7 +520,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
                 Log.d(REACT_MODULE, "StepCountObserver onChanged");
                 stepSuccessCallback.invoke("steps changed");
             }
-            stepErrorCallback.invoke("getting step change failed");
+            stepErrorCallback.invoke("Getting step change notification failed");
         }
     };
 }

@@ -53,32 +53,28 @@ public class ConnectionListener implements
     private Callback mErrorCallback;
     private SamsungHealthModule mModule;
     private HealthConnectionErrorResult mConnError;
+    private Boolean mRequestPermission;
 
     private static final String REACT_MODULE = "RNSamsungHealth";
 
     public Set<PermissionKey> mKeySet;
 
-    public ConnectionListener(SamsungHealthModule module, Callback error, Callback success)
+    public ConnectionListener(SamsungHealthModule module, Callback error, Callback success, Boolean requestPermissions)
     {
         mModule = module;
         mErrorCallback = error;
         mSuccessCallback = success;
         mKeySet = new HashSet<PermissionKey>();
+        mRequestPermission = requestPermissions;
     }
     
     public void addReadPermission(String name)
     {
-        // mKeySet.add(new PermissionKey(name, PermissionType.READ));
-        // mKeySet.add(new PermissionKey(SamsungHealthModule.STEP_DAILY_TREND_TYPE, PermissionType.READ));
-
         mKeySet.add(new PermissionKey("com.samsung.shealth.step_daily_trend", PermissionType.READ));
-        mKeySet.add(new PermissionKey("com.samsung.health.step_count", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.weight", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.height", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.heart_rate", PermissionType.READ));
-        mKeySet.add(new PermissionKey("com.samsung.health.blood_pressure", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.sleep", PermissionType.READ));
-        mKeySet.add(new PermissionKey("com.samsung.health.body_temperature", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.body_fat", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.user_profile", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.exercise", PermissionType.READ));
@@ -99,7 +95,7 @@ public class ConnectionListener implements
             // Check whether the permissions that this application needs are acquired
             Map<PermissionKey, Boolean> resultMap = pmsManager.isPermissionAcquired(mKeySet);
 
-            if (resultMap.containsValue(Boolean.FALSE)) {
+            if (resultMap.containsValue(Boolean.FALSE) && mRequestPermission) {
                 // Request the permission for reading step counts if it is not acquired
                 pmsManager.requestPermissions(mKeySet, mModule.getContext().getCurrentActivity()).setResultListener(
                     new PermissionListener(mModule, mErrorCallback, mSuccessCallback)
