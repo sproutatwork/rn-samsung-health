@@ -6,8 +6,9 @@ import {
 const samsungHealth = NativeModules.RNSamsungHealth;
 
 class RNSamsungHealth {
-  authorize(callback) {
+  authorize(requestPermission, callback) {
     samsungHealth.connect(
+      requestPermission,
       [samsungHealth.STEP_COUNT],
       (msg) => { callback(msg, false); },
       (res) => { callback(false, res); },
