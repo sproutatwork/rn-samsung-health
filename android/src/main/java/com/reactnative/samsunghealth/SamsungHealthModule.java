@@ -428,6 +428,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             }
         } catch (Exception e) {
             Log.d(REACT_MODULE, "Do not have permission to get user profile");
+            error.invoke("Samsung Health: Getting data of birth failed");
         }
     }
 
@@ -447,6 +448,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
             }
         } catch (Exception e) {
             Log.d(REACT_MODULE, "Do not have permission to get user profile");
+            error.invoke("Samsung Health: Getting gender failed");
         }
     }
 
