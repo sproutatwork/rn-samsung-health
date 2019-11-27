@@ -8,6 +8,7 @@ import com.samsung.android.sdk.healthdata.HealthDataResolver.ReadRequest;
 import com.samsung.android.sdk.healthdata.HealthDataResolver.ReadResult;
 import com.samsung.android.sdk.healthdata.HealthDataStore;
 import com.samsung.android.sdk.healthdata.HealthResultHolder;
+import com.samsung.android.sdk.healthdata.HealthDataResolver.Filter;
 
 import android.util.Log;
 
@@ -28,7 +29,7 @@ public class StepCountReporter {
     public void start(StepCountObserver listener) {
         mStepCountObserver = listener;
         // Register an observer to listen changes of step count and get today step count
-        HealthDataObserver.addObserver(mStore, HealthConstants.StepCount.HEALTH_DATA_TYPE, mObserver);
+        HealthDataObserver.addObserver(mStore, SamsungHealthModule.STEP_DAILY_TREND_TYPE, mObserver);
         readTodayStepCount();
     }
 
@@ -44,17 +45,24 @@ public class StepCountReporter {
         long startTime = getStartTimeOfToday();
         long endTime = startTime + ONE_DAY_IN_MILLIS;
 
+        Filter filter = Filter.and(
+            Filter.greaterThanEquals(SamsungHealthModule.DAY_TIME, startTime),
+            Filter.lessThanEquals(SamsungHealthModule.DAY_TIME, endTime)
+        );
+
         HealthDataResolver.ReadRequest request = new ReadRequest.Builder()
-                    .setDataType(HealthConstants.StepCount.HEALTH_DATA_TYPE)
-                    .setProperties(new String[] {HealthConstants.StepCount.COUNT})
-                    .setLocalTimeRange(HealthConstants.StepCount.START_TIME, HealthConstants.StepCount.TIME_OFFSET,
-                            startTime, endTime)
+                    .setDataType(SamsungHealthModule.STEP_DAILY_TREND_TYPE)
+                    .setProperties(new String[] {
+                        HealthConstants.StepCount.COUNT,
+                        SamsungHealthModule.DAY_TIME
+                        })
+                    .setFilter(filter)
                     .build();
 
         try {
             resolver.read(request).setResultListener(mListener);
         } catch (Exception e) {
-            Log.e(REACT_MODULE, "Getting step count fails.", e);
+            Log.e(REACT_MODULE, "Samsung Health: Getting step count failed in StepCountReporter.", e);
         }
     }
 
@@ -94,7 +102,7 @@ public class StepCountReporter {
         // Update the step count when a change event is received
         @Override
         public void onChange(String dataTypeName) {
-            Log.d(REACT_MODULE, "Observer receives a data changed event");
+            Log.d(REACT_MODULE, "Samsung Health: StepCountObserver received a data changed event");
             readTodayStepCount();
         }
     };
