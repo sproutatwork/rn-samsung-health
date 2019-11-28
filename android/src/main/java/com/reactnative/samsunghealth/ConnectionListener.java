@@ -73,7 +73,6 @@ public class ConnectionListener implements
         mKeySet.add(new PermissionKey("com.samsung.shealth.step_daily_trend", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.weight", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.height", PermissionType.READ));
-        mKeySet.add(new PermissionKey("com.samsung.health.heart_rate", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.sleep", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.body_fat", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.user_profile", PermissionType.READ));
