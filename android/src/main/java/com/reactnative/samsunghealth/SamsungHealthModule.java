@@ -518,9 +518,13 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements
         public void onChanged(int count) {
             if (count > 0) {
                 Log.d(REACT_MODULE, "StepCountObserver onChanged");
-                stepSuccessCallback.invoke("steps changed");
+                if (stepSuccessCallback != null) {
+                    stepSuccessCallback.invoke("steps changed");
+                }
             }
-            stepErrorCallback.invoke("Getting step change notification failed");
+            if (stepErrorCallback != null) {
+                stepErrorCallback.invoke("Getting step change notification failed");
+            }
         }
     };
 }

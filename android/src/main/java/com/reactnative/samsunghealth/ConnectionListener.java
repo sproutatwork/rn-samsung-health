@@ -5,7 +5,6 @@ import android.util.Log;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 
 import com.facebook.react.bridge.Callback;
@@ -112,7 +111,6 @@ public class ConnectionListener implements
 
     @Override
     public void onConnectionFailed(HealthConnectionErrorResult error) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(mModule.getContext().getCurrentActivity());
         mConnError = error;
         String message = "Connection with Samsung Health is not available";
 
@@ -136,22 +134,6 @@ public class ConnectionListener implements
             }
         }
 
-        alert.setMessage(message);
-
-        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                if (mConnError.hasResolution()) {
-                    mConnError.resolve(mModule.getContext().getCurrentActivity());
-                }
-            }
-        });
-
-        if (error.hasResolution()) {
-            alert.setNegativeButton("Cancel", null);
-        }
-
-        //alert.show();
         mErrorCallback.invoke(message);
     }
 
