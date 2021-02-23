@@ -27,10 +27,10 @@ public class PermissionListener implements HealthResultHolder.ResultListener<Per
 
         if (resultMap.containsValue(Boolean.TRUE)) {
             Log.d(REACT_MODULE, "Permission Granted");
-            mSuccessCallback.invoke(true);
+            mPromise.resolve(true);
         } else {
             Log.e(REACT_MODULE, "NOT CONNECTED YET");
-            mErrorCallback.invoke("Permisson canceled");
+            mPromise.reject("Permisson canceled");
         }
     }
 };

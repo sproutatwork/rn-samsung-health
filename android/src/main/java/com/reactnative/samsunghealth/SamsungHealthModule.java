@@ -21,6 +21,7 @@ import com.samsung.android.sdk.healthdata.HealthDataResolver.Filter;
 import com.samsung.android.sdk.healthdata.HealthDataResolver.ReadRequest;
 import com.samsung.android.sdk.healthdata.HealthDataService;
 import com.samsung.android.sdk.healthdata.HealthDataStore;
+import com.samsung.android.sdk.healthdata.HealthUserProfile;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -70,7 +71,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements L
         constants.put("FLOORS_CLIMBED", HealthConstants.FloorsClimbed.HEALTH_DATA_TYPE);
         constants.put("STEP_DAILY_TREND", SamsungHealthModule.STEP_DAILY_TREND_TYPE);
         constants.put("BODY_FAT", HealthConstants.BodyFat.HEALTH_DATA_TYPE);
-        constatns.put("USER_PROFILE", HealthConstants.USER_PROFILE_DATA_TYPE);
+        constants.put("USER_PROFILE", HealthConstants.USER_PROFILE_DATA_TYPE);
 
         return constants;
     }
