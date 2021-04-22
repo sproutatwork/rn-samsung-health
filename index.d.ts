@@ -1,5 +1,6 @@
 declare module 'rn-samsung-health' {
-  export const authorize: () => Promise<boolean>;
+  
+  export const authorize: (requestPermission: Boolean) => Promise<boolean>;
 
   interface IOptionData {
     startDate: number;
@@ -179,6 +180,12 @@ declare module 'rn-samsung-health' {
 
   export const getHeight: (options: IOptionData) => Promise<IHeightData[]>;
 
+  export const getDateOfBirth: () => Promise<IDateOfBirthData[]>;
+
+  export const getGender: () => Promise<IGenderData[]>;
+
+  export const getLatestBodyFatPercentage: (options: IOptionData) => Promis<IBodyFatData[]>;
+
   export const getCholesterol: (
     options: IOptionData
   ) => Promise<ICholesterolData[]>;
@@ -192,6 +199,8 @@ declare module 'rn-samsung-health' {
   ) => Promise<INutritionData[]>;
 
   export const getExercise: (options: IOptionData) => Promise<IExerciseData[]>;
+
+  export const getWalkingRunningDistance: (options: IOptionData) => Promise<IWalkingData[]>;
 
   export const getFloorsClimbed: (
     options: IOptionData
