@@ -133,6 +133,24 @@ class RNSamsungHealth {
     });
   }
 
+  getWalkingRunningDistance(options) {
+    let startDate =
+      options.startDate != undefined
+        ? options.startDate
+        : new Date().setHours(0, 0, 0, 0);
+    let endDate =
+      options.endDate != undefined ? options.endDate : new Date().valueOf();
+
+      return new Promise((resolve, reject) => {
+        samsungHealth.readStepCountSamples(
+          startDate,
+          endDate,
+          (msg) => reject(msg),
+          (res) => resolve(res)
+        );
+      });
+  }
+
   getFloorsClimbed(options) {
     let startDate =
       options.startDate != undefined
@@ -197,6 +215,38 @@ class RNSamsungHealth {
 
     return new Promise((resolve, reject) => {
       samsungHealth.readHeight(
+        startDate,
+        endDate,
+        (msg) => reject(msg),
+        (res) => resolve(res)
+      );
+    });
+  }
+
+  getDateOfBirth() {
+    return new Promise((resolve, reject) => {
+      samsungHealth.readDateOfBirth(
+        (msg) => reject(msg),
+        (res) => resolve(res)
+      );
+    });
+  }
+
+  getGender() {
+    return new Promise((resolve, reject) => {
+      samsungHealth.readGender(
+        (msg) => reject(msg),
+        (res) => resolve(res)
+      );
+    });
+  }
+
+  getLatestBodyFatPercentage(options) {
+    let startDate = options.startDate != undefined ? options.startDate : (new Date()).setHours(0,0,0,0);
+    let endDate = options.endDate != undefined ? options.endDate : (new Date()).valueOf();
+
+    return new Promise((resolve, reject) => {
+      samsungHealth.readBodyFatPercentage(
         startDate,
         endDate,
         (msg) => reject(msg),

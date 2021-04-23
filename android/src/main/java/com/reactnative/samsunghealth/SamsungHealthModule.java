@@ -1,7 +1,7 @@
 package com.reactnative.samsunghealth;
 
 import android.util.Log;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
@@ -61,7 +61,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements L
     @Override
     public Map<String, Object> getConstants() {
         final Map<String, Object> constants = new HashMap<>();
-        //constants.put("STEP_COUNT", HealthConstants.StepCount.HEALTH_DATA_TYPE);
+        constants.put("STEP_COUNT", HealthConstants.StepCount.HEALTH_DATA_TYPE);
         constants.put("WEIGHT", HealthConstants.Weight.HEALTH_DATA_TYPE);
         constants.put("HEIGHT", HealthConstants.Height.HEALTH_DATA_TYPE);
         //constants.put("HEART_RATE", HealthConstants.HeartRate.HEALTH_DATA_TYPE);
@@ -262,7 +262,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements L
         } catch (Exception e) {
             Log.e(REACT_MODULE, e.getClass().getName() + " - " + e.getMessage());
             Log.e(REACT_MODULE, "Getting BodyTemperature fails.");
-            error.invoke("Samsung Health: etting BodyTemperature failed.");
+            error.invoke("Samsung Health: Getting BodyTemperature failed.");
         }
     }
 
@@ -476,6 +476,33 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements L
         } catch (Exception e) {
             Log.d(REACT_MODULE, "Do not have permission to get user profile");
             error.invoke("Samsung Health: Getting gender failed");
+        }
+    }
+
+    @ReactMethod
+    public void readBodyFatPercentage(double startDate, double endDate, Callback error, Callback success) {
+        HealthDataResolver resolver = new HealthDataResolver(mStore, null);
+        Filter filter = Filter.and(
+            Filter.greaterThanEquals(HealthConstants.Weight.START_TIME, (long)startDate),
+            Filter.lessThanEquals(HealthConstants.Weight.START_TIME, (long)endDate)
+        );
+        HealthDataResolver.ReadRequest request = new ReadRequest.Builder()
+                .setDataType(HealthConstants.Weight.HEALTH_DATA_TYPE) 
+                .setProperties(new String[]{
+                        HealthConstants.Weight.START_TIME,
+                        HealthConstants.Weight.BODY_FAT,
+                        HealthConstants.Weight.TIME_OFFSET, 
+                        HealthConstants.Weight.DEVICE_UUID  
+                })
+                .setFilter(filter)
+                .build();
+
+        try {
+            resolver.read(request).setResultListener(new HealthDataResultListener(this, error, success));
+        } catch (Exception e) {
+            Log.e(REACT_MODULE, e.getClass().getName() + " - " + e.getMessage());
+            Log.e(REACT_MODULE, "Getting weight body fat fails.");
+            error.invoke("Samsung Health: Getting weight body fat failed.");
         }
     }
 
