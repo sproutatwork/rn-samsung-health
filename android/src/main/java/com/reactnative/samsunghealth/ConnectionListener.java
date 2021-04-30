@@ -28,22 +28,27 @@ public class ConnectionListener implements HealthDataStore.ConnectionListener {
     private static final String REACT_MODULE = "RNSamsungHealth";
 
     public Set<PermissionKey> mKeySet;
+    public Set<PermissionKey> mStepsKeySet;
 
     public ConnectionListener(SamsungHealthModule module, Promise promise, Boolean requestPermissions) {
         mModule = module;
         mPromise = promise;
         mKeySet = new HashSet<PermissionKey>();
+        mStepsKeySet = new HashSet<PermissionKey>();
         mRequestPermission = requestPermissions;
     }
 
     public void addReadPermission(String name) {
-        mKeySet.add(new PermissionKey("com.samsung.health.step_count", PermissionType.READ));
+        mKeySet.add(new PermissionKey("com.samsung.shealth.step_daily_trend", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.weight", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.height", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.body_fat", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.user_profile", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.exercise", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.sleep", PermissionType.READ));
+        mKeySet.add(new PermissionKey("com.samsung.health.heart_rate", PermissionType.READ));
+
+        mStepsKeySet.add(new PermissionKey("com.samsung.shealth.step_daily_trend", PermissionType.READ));
     }
 
     @Override
@@ -60,8 +65,10 @@ public class ConnectionListener implements HealthDataStore.ConnectionListener {
         try {
             // Check whether the permissions that this application needs are acquired
             Map<PermissionKey, Boolean> resultMap = pmsManager.isPermissionAcquired(mKeySet);
-
-            if (resultMap.containsValue(Boolean.FALSE) && mRequestPermission) {
+            Map<PermissionKey, Boolean> stepsResultMap = pmsManager.isPermissionAcquired(mStepsKeySet);
+            Log.d(REACT_MODULE, resultMap + "ResultMap");
+            Log.d(REACT_MODULE, stepsResultMap + "StepsResultMap");
+            if (stepsResultMap.containsValue(Boolean.FALSE) && mRequestPermission) {
                 // Request the permission for reading step counts if it is not acquired
                 pmsManager.requestPermissions(mKeySet, mModule.getContext().getCurrentActivity())
                         .setResultListener(new PermissionListener(mModule, mPromise));

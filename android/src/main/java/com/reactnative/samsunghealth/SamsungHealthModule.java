@@ -61,14 +61,11 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements L
     @Override
     public Map<String, Object> getConstants() {
         final Map<String, Object> constants = new HashMap<>();
-        constants.put("STEP_COUNT", HealthConstants.StepCount.HEALTH_DATA_TYPE);
         constants.put("WEIGHT", HealthConstants.Weight.HEALTH_DATA_TYPE);
         constants.put("HEIGHT", HealthConstants.Height.HEALTH_DATA_TYPE);
-        //constants.put("HEART_RATE", HealthConstants.HeartRate.HEALTH_DATA_TYPE);
+        constants.put("HEART_RATE", HealthConstants.HeartRate.HEALTH_DATA_TYPE);
         constants.put("SLEEP", HealthConstants.Sleep.HEALTH_DATA_TYPE);
-        constants.put("NUTRITION", HealthConstants.Nutrition.HEALTH_DATA_TYPE);
         constants.put("EXERCISE", HealthConstants.Exercise.HEALTH_DATA_TYPE);
-        constants.put("FLOORS_CLIMBED", HealthConstants.FloorsClimbed.HEALTH_DATA_TYPE);
         constants.put("STEP_DAILY_TREND", SamsungHealthModule.STEP_DAILY_TREND_TYPE);
         constants.put("BODY_FAT", HealthConstants.BodyFat.HEALTH_DATA_TYPE);
         constants.put("USER_PROFILE", HealthConstants.USER_PROFILE_DATA_TYPE);
