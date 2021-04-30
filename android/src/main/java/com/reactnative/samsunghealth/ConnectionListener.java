@@ -28,11 +28,13 @@ public class ConnectionListener implements HealthDataStore.ConnectionListener {
     private static final String REACT_MODULE = "RNSamsungHealth";
 
     public Set<PermissionKey> mKeySet;
+    public Set<PermissionKey> mStepsKeySet;
 
     public ConnectionListener(SamsungHealthModule module, Promise promise, Boolean requestPermissions) {
         mModule = module;
         mPromise = promise;
         mKeySet = new HashSet<PermissionKey>();
+        mStepsKeySet = new HashSet<PermissionKey>();
         mRequestPermission = requestPermissions;
     }
 
@@ -63,8 +65,10 @@ public class ConnectionListener implements HealthDataStore.ConnectionListener {
         try {
             // Check whether the permissions that this application needs are acquired
             Map<PermissionKey, Boolean> resultMap = pmsManager.isPermissionAcquired(mKeySet);
-
-            if (resultMap.containsValue(Boolean.FALSE) && mRequestPermission) {
+            Map<PermissionKey, Boolean> stepsResultMap = pmsManager.isPermissionAcquired(mStepsKeySet);
+            Log.d(REACT_MODULE, resultMap + "ResultMap");
+            Log.d(REACT_MODULE, stepsResultMap + "StepsResultMap");
+            if (stepsResultMap.containsValue(Boolean.FALSE) && mRequestPermission) {
                 // Request the permission for reading step counts if it is not acquired
                 pmsManager.requestPermissions(mKeySet, mModule.getContext().getCurrentActivity())
                         .setResultListener(new PermissionListener(mModule, mPromise));
