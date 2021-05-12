@@ -66,9 +66,9 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements L
         constants.put("HEART_RATE", HealthConstants.HeartRate.HEALTH_DATA_TYPE);
         constants.put("SLEEP", HealthConstants.Sleep.HEALTH_DATA_TYPE);
         constants.put("EXERCISE", HealthConstants.Exercise.HEALTH_DATA_TYPE);
-        constants.put("STEP_DAILY_TREND", SamsungHealthModule.STEP_DAILY_TREND_TYPE);
         constants.put("BODY_FAT", HealthConstants.BodyFat.HEALTH_DATA_TYPE);
         constants.put("USER_PROFILE", HealthConstants.USER_PROFILE_DATA_TYPE);
+        constants.put("STEP_COUNT", HealthConstants.StepCount.HEALTH_DATA_TYPE);
 
         return constants;
     }
@@ -168,7 +168,7 @@ public class SamsungHealthModule extends ReactContextBaseJavaModule implements L
             resolver.read(request).setResultListener(new HealthDataResultListener(this, error, success));
         } catch (Exception e) {
             Log.e(REACT_MODULE, e.getClass().getName() + " - " + e.getMessage());
-            Log.e(REACT_MODULE, "Getting step count fails.");
+            Log.e(REACT_MODULE, "Getting step trend fails.");
             error.invoke("Samsung Health: Getting step count failed.");
         }
 
