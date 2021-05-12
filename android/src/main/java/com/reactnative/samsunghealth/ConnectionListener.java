@@ -39,7 +39,6 @@ public class ConnectionListener implements HealthDataStore.ConnectionListener {
     }
 
     public void addReadPermission(String name) {
-        mKeySet.add(new PermissionKey("com.samsung.shealth.step_daily_trend", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.weight", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.height", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.body_fat", PermissionType.READ));
@@ -47,8 +46,9 @@ public class ConnectionListener implements HealthDataStore.ConnectionListener {
         mKeySet.add(new PermissionKey("com.samsung.health.exercise", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.sleep", PermissionType.READ));
         mKeySet.add(new PermissionKey("com.samsung.health.heart_rate", PermissionType.READ));
+        mKeySet.add(new PermissionKey("com.samsung.health.step_count", PermissionType.READ));
 
-        mStepsKeySet.add(new PermissionKey("com.samsung.shealth.step_daily_trend", PermissionType.READ));
+        mStepsKeySet.add(new PermissionKey("com.samsung.health.step_count", PermissionType.READ));
     }
 
     @Override

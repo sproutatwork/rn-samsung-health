@@ -142,7 +142,7 @@ class RNSamsungHealth {
       options.endDate != undefined ? options.endDate : new Date().valueOf();
 
       return new Promise((resolve, reject) => {
-        samsungHealth.readStepCountDailies(
+        samsungHealth.readStepCountSamples(
           startDate,
           endDate,
           (msg) => reject(msg),
